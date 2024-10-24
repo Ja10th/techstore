@@ -9,6 +9,7 @@ import Top from "../components/top";
 import { PiEmpty } from "react-icons/pi";
 import Floating from "../components/floating";
 import Link from "next/link";
+import NavbarCart from "../components/NavbarCart";
 
 // Dynamically load PaystackButton to ensure it's client-side only
 const PaystackButton = dynamic(
@@ -60,74 +61,71 @@ const ShoppingCartPage = () => {
 
   return (
     <div className="fixed inset-0 bg-white flex flex-col">
-      {/* Render the Navbar at the top */}
-      <Top />
-      <Floating />
-      <Navbar />
-
-      <div className="flex-1 overflow-auto p-4 px-10">
-        <h1 className="text-black font-black text-4xl py-5 md:text-8xl mb-4">
-          Your Cart
-        </h1>
-
-        <div className="h-full flex flex-col justify-between">
-          <div className="flex-1 overflow-y-auto">
-            <ul className="my-6 divide-y divide-gray-300">
-              {cartCount === 0 ? (
-                <div>
-                  <hr className="border-black mb-10"/>
-                  <h1 className="flex items-center gap-2  py-5 text-sm text-left">
+    <Top />
+    <Floating />
+    <div className="!mt-40">
+    <NavbarCart />
+    </div>
+  
+    <div className="flex-1 overflow-auto p-4 md:px-10">
+      <h1 className="text-black font-black text-4xl py-5 md:text-6xl lg:text-8xl mb-4">
+        Your Cart
+      </h1>
+  
+      <div className="flex flex-col gap-10 md:flex-row md:px-0">
+        <div className="w-full">
+          <ul className="divide-gray-300">
+            {safeCartCount === 0 ? (
+              <div>
+                <hr className="border-black mb-10" />
+                <h1 className="flex items-center gap-2 py-5 text-sm text-left">
                   <PiEmpty />
                   Your cart is currently empty. Shop now to secure the bag.
-                  </h1>
-                  <Link href='/'> 
+                </h1>
+                <Link href="/">
                   <button className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-2xl">
                     Return to Store
                   </button>
-                  </Link>
-                  
-                </div>
-              ) : (
-                <>
-                <div className="w-[500px] border rounded-xl border-black p-20">
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="bg-gray-100 p-4 rounded-xl md:p-10">
                   {Object.values(cartDetails ?? {}).map((entry) => (
                     <li key={entry.id} className="flex py-6 items-center">
-                      <div className="h-16 w-16 flex-shrink-0 overflow-hidden border rounded-xl p-3 border-gray-300">
+                      <div className="hidden md:flex h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl p-3 border-gray-300">
                         <Image
                           src={entry.image as string}
                           alt="Product image"
                           width={100}
                           height={100}
+                          className="object-contain group-hover:scale-110 transition ease-in-out rounded-xl w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
                         />
                       </div>
-
+  
                       <div className="ml-6 flex-1">
                         <div className="flex justify-between text-lg font-semibold text-gray-800">
                           <h3>{entry.name}</h3>
-                          <p className="ml-4">
-                            ₦{entry.price.toLocaleString()}
-                          </p>
+                          <p className="ml-4">₦{entry.price.toLocaleString()}</p>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                        <p className="text-sm text-gray-500 mt-1">
                           {entry.description}
                         </p>
-
+  
                         <div className="flex justify-between items-center mt-4">
                           <div className="flex items-center">
                             <button
                               type="button"
                               onClick={() => decrementItem(entry.id)}
-                              className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-3 py-1 text-lg font-medium"
+                              className="text-blue-400 border border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white px-2 py-0 text-lg font-medium"
                             >
                               -
                             </button>
-                            <p className="mx-3 text-gray-700">
-                              Qty: {entry.quantity}
-                            </p>
+                            <p className="mx-3 text-gray-700">{entry.quantity}</p>
                             <button
                               type="button"
                               onClick={() => incrementItem(entry.id)}
-                              className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-3 py-1 text-lg font-medium"
+                              className="text-green-500 border-2 border-green-500 rounded-xl hover:bg-blue-600 px-2 text-lg font-medium"
                             >
                               +
                             </button>
@@ -135,7 +133,9 @@ const ShoppingCartPage = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              decrementItem(entry.id, { count: entry.quantity })
+                              decrementItem(entry.id, {
+                                count: entry.quantity,
+                              })
                             }
                             className="text-sm text-red-500 hover:underline"
                           >
@@ -146,48 +146,55 @@ const ShoppingCartPage = () => {
                     </li>
                   ))}
                 </div>
-                </>
-              )}
-            </ul>
-          </div>
-
-          {safeCartCount > 0 && (
-            <div className="border-t border-gray-300 pt-6">
-              <div className="flex justify-between text-lg font-medium text-gray-900">
-                <p>Subtotal:</p>
-                <p>₦{safeTotalPrice.toLocaleString()}</p>
+              </>
+            )}
+          </ul>
+        </div>
+  
+        {safeCartCount > 0 && (
+          <div className="w-full md:w-1/2 lg:w-1/3 rounded-xl bg-gray-100 p-20 ms:py-6 md:px-20">
+            <div className="flex flex-col">
+              <h2 className="text-lg font-medium text-gray-900">Order Summary</h2>
+              <div className="flex justify-between text-gray-900 mt-4">
+                <p className="text-sm font-light">Subtotal:</p>
+                <p className="text-sm">₦{safeTotalPrice.toLocaleString()}</p>
               </div>
-              <p className="mt-1 text-sm text-gray-500">
-                Shipping and taxes calculated at checkout.
-              </p>
-
-              {/* Address input field */}
-              <div className="mt-4">
-                <label className="block text-gray-700">Delivery Address:</label>
+              <div className="flex justify-between text-lg font-medium text-gray-900 mt-2">
+                <p className="text-sm font-light">Delivery Fee:</p>
+                <p className="text-sm">₦0.00</p>
+              </div>
+              <div className="flex justify-between text-lg font-medium text-gray-900 mt-10">
+                <p className="text-sm font-light">Total:</p>
+                <p className="text-sm">₦{(safeTotalPrice + 0).toLocaleString()}</p>
+              </div>
+  
+              <div className="mt-10">
+                <label className="block text-gray-700 text-xs my-2">Delivery Address:</label>
                 <input
                   type="text"
                   value={address}
                   onChange={handleAddressChange}
-                  className="border rounded-lg py-2 px-4 w-full"
+                  className="text-sm py-2 px-4 w-full border border-gray-300 rounded-md"
                   placeholder="Enter your delivery address"
                 />
               </div>
-
-              {/* Paystack button */}
+  
               <div className="mt-6">
                 <PaystackButton
-                  className="bg-blue-500 hover:bg-blue-600 text-white w-full p-3 rounded-lg"
+                  className="bg-blue-500 hover:bg-blue-600 text-white w-full p-3 rounded-xl"
                   {...paystackConfig}
-                  text="Checkout with Paystack"
+                  text="Proceed to Checkout"
                   onSuccess={handleSuccess}
                   onClose={handleClose}
                 />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
+  </div>
+  
   );
 };
 

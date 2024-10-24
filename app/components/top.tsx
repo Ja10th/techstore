@@ -23,7 +23,7 @@ const Top = () => {
   }, []);
 
   return (
-    <div className="h-14 w-full bg-black text-white text-xs flex items-center justify-center">
+    <div className="h-14 w-full bg-[#593653] text-white text-xs hidden md:flex items-center justify-center">
       <motion.p
         key={currentMessageIndex} // Use key to trigger re-mounting of the component
         initial={{ opacity: 0 }} // Initial opacity

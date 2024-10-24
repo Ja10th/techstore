@@ -10,7 +10,7 @@ import { contextReader } from "../context/ContextProvider";
 import { LuArrowUpRightFromCircle } from "react-icons/lu";
 import { FaCircle } from "react-icons/fa6";
 
-const Navbar = () => {
+const NavbarCart = () => {
   const { cartCount } = useShoppingCart();
   const [isFixed, setIsFixed] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -48,8 +48,8 @@ const Navbar = () => {
       initial={{ filter: "blur(10px)", opacity: 0 }}
       animate={{ filter: "blur(0px)", opacity: 1 }}
       transition={{ delay: 1.2, duration: 1.4, ease: "easeInOut" }}
-      className={`fixed top-4 left-1/2 items-center justify-center transform -translate-x-1/2 h-14 mt-4  z-50 w-full px-40 transition-all duration-300 ${
-        isFixed ? "bg-white px-8 -top-4 mt-0 text-black backdrop-blur-2xl shadow-lg" : "text-white bg-  "
+      className={`fixed top-16 left-1/2 items-center justify-center transform -translate-x-1/2 h-14 mt-4  z-50 w-[55%] md:w-[80%] transition-all duration-300 ${
+        isFixed ? "bg-white/30 mt-0 text-black backdrop-blur-2xl shadow-lg" : "text-black bg-  "
       } px-4  py-4`}
     >
       <div className="flex items-center justify-between">
@@ -96,4 +96,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarCart;

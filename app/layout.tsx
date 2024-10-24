@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CartProvider from "./components/CartProvider";
-
+import { ContextProvider } from "./context/ContextProvider";
+import Modal from "./components/Modal";
 
 export const metadata: Metadata = {
   title: "Infoworld Store",
@@ -15,12 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className="antialiased fontBody"
-      >
-        <CartProvider>
-        {children}
-        </CartProvider>
+      <body className="antialiased fontBody">
+        <ContextProvider>
+          <CartProvider>{children}</CartProvider>
+          <Modal />
+        </ContextProvider>
       </body>
     </html>
   );

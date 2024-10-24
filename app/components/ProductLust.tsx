@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useShoppingCart } from "use-shopping-cart";
 import { urlForImage } from "./AddtoCart";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface DataType {
   images: any;
@@ -32,6 +33,7 @@ async function fetchProducts() {
 
 const ProductList = () => {
   const [products, setProducts] = useState<DataType[]>([]);
+  const [hoveredProduct, setHoveredProduct] = useState<DataType | null>(null);
   const { addItem } = useShoppingCart();
 
   useEffect(() => {
@@ -54,51 +56,57 @@ const ProductList = () => {
     });
   };
 
-  if (!products.length) return <div className="text-center py-10">Infoworld Global Enterpises...</div>;
+  if (!products.length) return <div className="text-center py-10">Infoworld Global Enterprises...</div>;
 
   return (
-    <div>
-      <div className="grid grid-cols-1 px-10 md:px-0 gap-y-2 md:gap-y-0 md:grid-cols-4 pt-5 mt-5 w-full">
+    <div className="relative z-30">
+      <motion.div 
+         initial={{y: '100px', opacity: 0}}
+         whileInView={{y: '0px', opacity: 1}}
+         transition={{delay: 1.2, duration: 1.4, ease: 'easeInOut'}}
+      className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 md:grid-cols-4 pt-0 mt-0 w-full">
         {products.map((product, index) => (
-          <Link
+          <Link href={`/product/${product.slug}`}
             key={product._id}
-            href={`/product/${product.slug}`}
-            className={`group product-card relative dark:bg-black bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.2] hover:bg-dot-black/[0.8] border border-black transition ease-in-out duration-200 
-              ${index % 4 !== 3 ? "md:border-r-0" : ""} 
-              ${index < products.length - 4 ? "md:border-b-0" : ""}`}
+            className={`product-card z-30 relative bg-white border border-black dark:bg-black transition-transform ease-in-out duration-500 
+              ${index % 4 !== 3 ? 'md:border-r-0' : ''}  
+              ${index < products.length - 4 ? 'md:border-b-0' : ''}`}
+              onMouseEnter={() => setHoveredProduct(product)}
+            onMouseLeave={() => setHoveredProduct(null)}
           >
-            <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-
-            <div className="flex justify-between px-5 py-5 relative z-40 gap-10">
+            <div className="flex justify-between px-5 py-5 relative gap-10 z-40">
               <h3 className="uppercase text-sm">{product.name}</h3>
               <p className="text-sm">NGN {product.price.toLocaleString("en-NG")}</p>
             </div>
-            <div className="py-20 px-20">
+            <div className="py-20 px-20 relative z-40">
               {product.images && (
                 <Image
                   src={urlForImage(product.images).url()}
                   width={150}
                   height={150}
                   alt={product.name}
-                  className="object-contain group-hover:scale-110 transition ease-in-out rounded-xl cursor-pointer w-[150px] h-[150px] md:w-[250px] md:h-[250px]"
+                  className="object-contain transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer w-[150px] h-[150px] md:w-[250px] md:h-[250px]"
                 />
               )}
             </div>
-            <div className="absolute bottom-0 inset-0 right-0 left-0 items-center justify-center hidden group-hover:flex transition ease-in-out z-40">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleAddToCart(product);
-                }}
-                className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white py-2 px-10 border-none z-50"
-              >
-                Add to Cart
-              </button>
-            </div>
+
+            {hoveredProduct?._id === product._id && (
+              <div className="absolute bottom-0 inset-0 right-0 left-0 justify-end flex flex-col gap-2 bg-black bg-opacity-60 p-4 rounded-md z-50 transition ease-in-out duration-500">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white py-2 px-10 border-none"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            )}
           </Link>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
