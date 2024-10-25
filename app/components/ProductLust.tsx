@@ -56,28 +56,37 @@ const ProductList = () => {
     });
   };
 
-  if (!products.length) return <div className="text-center py-10">Infoworld Global Enterprises...</div>;
+  if (!products.length)
+    return (
+      <div className="flex items-center justify-center h-screen bg-white">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
 
   return (
     <div className="relative z-30">
-      <motion.div 
-         initial={{y: '100px', opacity: 0}}
-         whileInView={{y: '0px', opacity: 1}}
-         transition={{delay: 0.5, duration: 0.8, ease: 'easeInOut'}}
-         className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 md:grid-cols-4 pt-0 mt-0 w-full"
+      <motion.div
+        initial={{ filter: "blur(100px)", opacity: 0 }}
+        whileInView={{ filter: "blur(0px)", opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
+        className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] md:grid-cols-4 pt-0 mt-0 w-full"
       >
         {products.map((product, index) => (
-          <Link href={`/product/${product.slug}`}
+          <Link
+            href={`/product/${product.slug}`}
             key={product._id}
-            className={`product-card z-30 relative bg-white border border-black dark:bg-black transition-transform ease-in-out duration-700 
-              ${index % 4 !== 3 ? 'md:border-r-0' : ''}  
-              ${index < products.length - 4 ? 'md:border-b-0' : ''}`}
-              onMouseEnter={() => setHoveredProduct(product)}
-              onMouseLeave={() => setHoveredProduct(null)}
+            className={`product-card z-30 relative bg-white border md:border-b-0 border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
+              ${index % 4 !== 3 ? "md:border-r-0" : ""}  
+              ${index < products.length - 4 ? "md:border-b-0" : ""}`}
+            onMouseEnter={() => setHoveredProduct(product)}
+            onMouseLeave={() => setHoveredProduct(null)}
           >
+            <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
             <div className="flex justify-between px-5 py-5 relative gap-10 z-40">
               <h3 className="uppercase text-sm">{product.name}</h3>
-              <p className="text-sm">NGN {product.price.toLocaleString("en-NG")}</p>
+              <p className="text-sm">
+                NGN {product.price.toLocaleString("en-NG")}
+              </p>
             </div>
             <div className="py-20 px-20 relative z-40">
               {product.images && (
@@ -96,7 +105,7 @@ const ProductList = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="absolute bottom-0 inset-0 right-0 left-0 justify-end flex flex-col gap-2 p-4 rounded-md z-50"
               >
                 <button
@@ -114,11 +123,12 @@ const ProductList = () => {
           </Link>
         ))}
       </motion.div>
-      <motion.div 
-       initial={{filter: 'blur(10px)', opacity: 0}}
-       whileInView={{filter: 'blur(0px)', opacity: 1}}
-       transition={{delay: 0.5, duration: 0.8, ease: 'easeInOut'}}
-      className="bg-blue-500 hover:underline underline-offset-1 h-14 w-full flex justify-center items-center">
+      <motion.div
+        initial={{ filter: "blur(10px)", opacity: 0 }}
+        whileInView={{ filter: "blur(0px)", opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
+        className="bg-blue-500 hover:underline underline-offset-1 h-14 w-full flex justify-center items-center"
+      >
         <p className="text-white">Get the Latest</p>
       </motion.div>
     </div>

@@ -1,26 +1,22 @@
-"use client";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Floating from "./floating";
-import Navbar from "./Navbar";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
+import { FlipWords } from "./ui/flip-words";
 
 
 const Hero = () => {
 
+  const words = ["Accessories", "Gadgets", "Electronics", "Wearables", "Gear", "Essentials"];
+
   return (
     <div className="relative z-40">
-      {/* <Top /> */}
-      <Navbar />
-
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ delay: 1.2, duration: 1.4, ease: "easeInOut" }}
-        className="absolute top-[20%] md:top-[40%] left-1 text-center md:text-left md:left-20 transform -translate-y-1/2 max-w-3xl z-20"
+        className="absolute top-[20%] md:top-[40%] left-1 text-center md:text-left md:left-20 transform -translate-y-1/2 max-w-4xl z-20"
       >
         <h1 className="text-4xl px-10 md:px-0 md:text-7xl font-[400] text-white">
-          Your One-Stop Shop for Tech Accessories
+          Your One-Stop Shop for <FlipWords words={words} /> <br />
         </h1>
         <div className="flex items-center justify-center md:justify-start text-center pt-5 gap-5 ">
           <p className="border border-black bg-black hover:scale-110 transition-all duration-200 ease-in-out text-white rounded-xl flex items-center px-10 py-3">

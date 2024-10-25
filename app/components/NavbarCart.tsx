@@ -62,7 +62,7 @@ const NavbarCart = () => {
             About Us
           </Link>
           <Link href="/collaborate" className="hover:underline">
-            Collaborate
+            Seller
           </Link>
           <Link href="/blog" className="hover:underline">
             Blog
@@ -71,7 +71,7 @@ const NavbarCart = () => {
 
         {/* Logo */}
         <Link href="/">
-        <BsFillArrowUpRightCircleFill className="text-3xl text-black"/>
+        <BsFillArrowUpRightCircleFill className="text-3xl text-black border border-white"/>
         </Link>
 
         {/* Right Icons */}
