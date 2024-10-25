@@ -15,7 +15,7 @@ const Hero = () => {
         transition={{ delay: 1.2, duration: 1.4, ease: "easeInOut" }}
         className="absolute top-[20%] md:top-[40%] left-1 text-center md:text-left md:left-20 transform -translate-y-1/2 max-w-4xl z-20"
       >
-        <h1 className="text-4xl px-10 md:px-0 md:text-7xl font-[400] text-white">
+        <h1 className="text-3xl px-6 md:px-0 md:text-7xl font-[400] pt-10 md:pt-0 font-mono text-white">
           Your One-Stop Shop for <FlipWords words={words} /> <br />
         </h1>
         <div className="flex items-center justify-center md:justify-start text-center pt-5 gap-5 ">
@@ -33,7 +33,7 @@ const Hero = () => {
       >
         <img
           src="https://images.pexels.com/photos/8001222/pexels-photo-8001222.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          className="h-[50rem] w-full object-cover"
+          className="h-[40rem] md:h-[50rem] w-full object-center object-cover"
         />
       </motion.div>
     </div>

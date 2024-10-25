@@ -69,20 +69,20 @@ const ProductList = () => {
         initial={{ filter: "blur(100px)", opacity: 0 }}
         whileInView={{ filter: "blur(0px)", opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
-        className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] md:grid-cols-4 pt-0 mt-0 w-full"
+        className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 md:grid-cols-4 pt-0 mt-0 w-full"
       >
         {products.map((product, index) => (
           <Link
             href={`/product/${product.slug}`}
             key={product._id}
-            className={`product-card z-30 relative bg-white border md:border-b-0 border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
+            className={`product-card z-30 relative bg-[#F1F1F1] border md:border-b-0 border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
               ${index % 4 !== 3 ? "md:border-r-0" : ""}  
               ${index < products.length - 4 ? "md:border-b-0" : ""}`}
             onMouseEnter={() => setHoveredProduct(product)}
             onMouseLeave={() => setHoveredProduct(null)}
           >
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-            <div className="flex justify-between px-5 py-5 relative gap-10 z-40">
+            <div className="flex justify-between px-5 py-6 md:py-12 relative gap-10 z-40">
               <h3 className="uppercase text-sm">{product.name}</h3>
               <p className="text-sm">
                 NGN {product.price.toLocaleString("en-NG")}
@@ -95,7 +95,7 @@ const ProductList = () => {
                   width={150}
                   height={150}
                   alt={product.name}
-                  className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[150px] h-[150px] md:w-[250px] md:h-[250px]"
+                  className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[200px] h-[200px] md:w-[250px] md:h-[250px]"
                 />
               )}
             </div>
