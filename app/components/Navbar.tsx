@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { BsMinecart } from "react-icons/bs";
+import { BsFillArrowUpRightCircleFill, BsMinecart } from "react-icons/bs";
 import { RiSearch2Line, RiUser4Line } from "react-icons/ri";
 import { useShoppingCart } from "use-shopping-cart";
 import { useRouter } from "next/navigation";
@@ -15,16 +15,14 @@ const Navbar = () => {
   const [isFixed, setIsFixed] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const router = useRouter();
-  
-  const contextUse= useContext(contextReader);
 
-  if (!contextUse){
-    throw new Error('Error gotten')
+  const contextUse = useContext(contextReader);
+
+  if (!contextUse) {
+    throw new Error("Error gotten");
   }
 
-  const { toggleModal } = contextUse
-
-
+  const { toggleModal } = contextUse;
 
   const toggleCart = () => {
     router.push("/cart");
@@ -48,10 +46,14 @@ const Navbar = () => {
       initial={{ filter: "blur(10px)", opacity: 0 }}
       animate={{ filter: "blur(0px)", opacity: 1 }}
       transition={{ delay: 1.2, duration: 1.4, ease: "easeInOut" }}
-      className={`fixed top-4 left-1/2 items-center justify-center transform -translate-x-1/2 h-14 mt-4  z-50 w-full px-40 transition-all duration-300 ${
-        isFixed ? "bg-white px-8 -top-4 mt-0 text-black backdrop-blur-2xl shadow-lg" : "text-white bg-  "
-      } px-4  py-4`}
+      className={`fixed left-1/2 items-center justify-center transform -translate-x-1/2 h-14 z-50 w-full px-40 transition-all duration-300 ${
+        isFixed
+          ? "bg-white px-40 top-0 text-black backdrop-blur-2xl shadow-lg" // Remove mt-0
+          : "top-8 text-white bg-transparent" // Leave top-4 when not fixed
+      } py-4`}
     >
+      {/* Navbar content here */}
+
       <div className="flex items-center justify-between">
         {/* Left Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-light">
@@ -62,7 +64,7 @@ const Navbar = () => {
             About Us
           </Link>
           <Link href="/collaborate" className="hover:underline">
-            Collaborate
+            Seller?
           </Link>
           <Link href="/blog" className="hover:underline">
             Blog
@@ -71,12 +73,15 @@ const Navbar = () => {
 
         {/* Logo */}
         <Link href="/">
-        <FaCircle className="text-3xl text-black"/>
+          <BsFillArrowUpRightCircleFill className="text-3xl text-black" />
         </Link>
 
         {/* Right Icons */}
         <div className="flex items-center gap-8">
-          <Link href="/contact" className="hidden md:block text-sm hover:underline">
+          <Link
+            href="/contact"
+            className="hidden md:block text-sm hover:underline"
+          >
             Contact & FAQ
           </Link>
           <RiUser4Line

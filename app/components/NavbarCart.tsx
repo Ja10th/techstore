@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { BsMinecart } from "react-icons/bs";
+import { BsFillArrowUpRightCircleFill, BsMinecart } from "react-icons/bs";
 import { RiSearch2Line, RiUser4Line } from "react-icons/ri";
 import { useShoppingCart } from "use-shopping-cart";
 import { useRouter } from "next/navigation";
@@ -71,7 +71,7 @@ const NavbarCart = () => {
 
         {/* Logo */}
         <Link href="/">
-        <FaCircle className="text-3xl text-black"/>
+        <BsFillArrowUpRightCircleFill className="text-3xl text-black"/>
         </Link>
 
         {/* Right Icons */}
