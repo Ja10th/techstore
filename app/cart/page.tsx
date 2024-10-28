@@ -47,11 +47,14 @@ const PaystackButton = dynamic(
 
 const ShoppingCartPage = () => {
   const [products, setProducts] = useState<DataType[]>([]);
-  const [hoveredProduct, setHoveredProduct] = useState<DataType | null>(null);
-  const { addItem } = useShoppingCart();
-
-  const { cartCount, cartDetails, decrementItem, incrementItem, totalPrice } =
-    useShoppingCart();
+  const {
+    cartCount,
+    cartDetails = {},
+    decrementItem,
+    incrementItem,
+    totalPrice,
+    addItem,
+  } = useShoppingCart();
   const [address, setAddress] = useState("");
 
   const safeCartCount = cartCount ?? 0;
@@ -70,15 +73,22 @@ const ShoppingCartPage = () => {
     loadProducts();
   }, []);
 
-  const handleAddToCart = (product: DataType) => {
-    addItem({
-      id: product.sku,
-      name: product.name,
-      price: product.price,
-      currency: "USD",
-      image: urlForImage(product.images).url(),
-      quantity: 1,
-    });
+  const handleAddToCart = (product: DataType, quantity: number) => {
+    const existingItem = cartDetails[product.sku]; // Check if the item already exists in the cart
+    if (existingItem) {
+      // If it exists, increment by selected quantity
+      incrementItem(product.sku, { count: quantity });
+    } else {
+      // Add the item with selected quantity
+      addItem({
+        id: product.sku,
+        name: product.name,
+        price: product.price,
+        currency: "USD",
+        image: urlForImage(product.images).url(),
+        quantity: quantity,
+      });
+    }
   };
 
   if (!products.length)
@@ -87,6 +97,7 @@ const ShoppingCartPage = () => {
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
+
   const paystackConfig = {
     email: "customer@example.com",
     amount: safeTotalPrice * 100,
@@ -132,7 +143,7 @@ const ShoppingCartPage = () => {
         variants={fadeIn}
         className="flex-1 overflow-auto p-4 md:px-10"
       >
-        <h1 className="text-black font-black text-3xl pt-20   md:text-4xl lg:text-8xl mb-4">
+        <h1 className="text-black font-black text-3xl pt-20 md:text-4xl lg:text-8xl mb-4">
           Your Cart
         </h1>
 
@@ -146,7 +157,7 @@ const ShoppingCartPage = () => {
                     <PiEmpty />
                     Your cart is currently empty. Shop now to secure the bag.
                   </h1>
-                  <Link href="/">
+                  <Link href="/category/all">
                     <button className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-2xl">
                       Return to Store
                     </button>
@@ -154,83 +165,77 @@ const ShoppingCartPage = () => {
                 </motion.div>
               ) : (
                 <>
-                  <div className="bg-gray-100 p-4 border rounded-xl md:p-5 px-20">
-                    {Object.values(cartDetails ?? {}).map(
-                      (entry, index, array) => (
-                        <motion.li
-                          key={entry.id}
-                          variants={fadeIn}
-                          className={`flex py-6 items-center px-20 ${index < array.length - 1 ? "border-b border-gray-300" : ""}`}
-                        >
-                          <div className="hidden md:flex h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl p-3 border-gray-300">
-                            <Image
-                              src={entry.image as string}
-                              alt="Product image"
-                              width={100}
-                              height={100}
-                              className="object-contain group-hover:scale-110 transition ease-in-out rounded-xl w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
-                            />
+                  <div className="bg-gray-100 p-4 border rounded-xl md:p-5">
+                    {Object.values(cartDetails ?? {}).map((entry, index) => (
+                      <motion.li
+                        key={entry.id}
+                        variants={fadeIn}
+                        className={`flex py-6 items-center ${index < Object.keys(cartDetails).length - 1 ? "border-b border-gray-300" : ""}`}
+                      >
+                        <div className="hidden md:flex h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl p-3 border-gray-300">
+                          <Image
+                            src={entry.image as string}
+                            alt="Product image"
+                            width={100}
+                            height={100}
+                            className="object-contain group-hover:scale-110 transition ease-in-out rounded-xl w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
+                          />
+                        </div>
+
+                        <div className="ml-6 flex-1">
+                          <div className="flex justify-between text-lg font-semibold text-gray-800">
+                            <h3>{entry.name}</h3>
+                            <p className="ml-4">
+                              ₦{(entry.quantity * entry.price).toLocaleString()}
+                            </p>
                           </div>
 
-                          <div className="ml-6 flex-1">
-                            <div className="flex justify-between text-lg font-semibold text-gray-800">
-                              <h3>{entry.name}</h3>
-                              <p className="ml-4">
-                                ₦{entry.price.toLocaleString()}
-                              </p>
-                            </div>
-                            <p className="text-sm text-gray-500 mt-1">
-                              {entry.description}
-                            </p>
-
-                            <div className="flex justify-between items-center mt-4">
-                              <div className="flex items-center">
-                                <motion.button
-                                  type="button"
-                                  onClick={() => decrementItem(entry.id)}
-                                  whileTap={{ scale: 0.9 }}
-                                  className="text-blue-400 border border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white px-2 py-0 text-lg font-medium"
-                                >
-                                  -
-                                </motion.button>
-                                <p className="mx-3 text-gray-700">
-                                  {entry.quantity}
-                                </p>
-                                <motion.button
-                                  type="button"
-                                  onClick={() => incrementItem(entry.id)}
-                                  whileTap={{ scale: 0.9 }}
-                                  className="text-green-500 border-2 border-green-500 rounded-xl hover:bg-blue-600 px-2 text-lg font-medium"
-                                >
-                                  +
-                                </motion.button>
-                              </div>
+                          <div className="flex justify-between items-center mt-4">
+                            <div className="flex items-center">
                               <motion.button
                                 type="button"
-                                onClick={() =>
-                                  decrementItem(entry.id, {
-                                    count: entry.quantity,
-                                  })
-                                }
+                                onClick={() => decrementItem(entry.id)}
                                 whileTap={{ scale: 0.9 }}
-                                className="text-sm text-red-500 hover:underline"
+                                className="text-blue-400 border border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white px-2 py-0 text-lg font-medium"
                               >
-                                Remove
+                                -
+                              </motion.button>
+                              <p className="mx-3 text-gray-700">
+                                {entry.quantity}
+                              </p>
+                              <motion.button
+                                type="button"
+                                onClick={() => incrementItem(entry.id)}
+                                whileTap={{ scale: 0.9 }}
+                                className="text-green-500 border-2 border-green-500 rounded-xl hover:bg-blue-600 px-2 text-lg font-medium"
+                              >
+                                +
                               </motion.button>
                             </div>
+                            <motion.button
+                              type="button"
+                              onClick={() =>
+                                decrementItem(entry.id, {
+                                  count: entry.quantity,
+                                })
+                              }
+                              whileTap={{ scale: 0.9 }}
+                              className="text-sm text-red-500 hover:underline"
+                            >
+                              Remove
+                            </motion.button>
                           </div>
-                        </motion.li>
-                      )
-                    )}
+                        </div>
+                      </motion.li>
+                    ))}
                   </div>
                 </>
               )}
             </ul>
           </div>
-
           {safeCartCount > 0 && (
             <motion.div
-              className="w-full md:w-1/2 lg:w-1/3 h-[500px] rounded-xl bg-gray-100 p-20 ms:py-6 md:px-20"
+              className="sticky top-20 w-full md:w-1/3  h-[500px] items-center justify-center flex rounded-xl bg-gray-100 p-20  md:py-6 md:px-1"
               variants={fadeIn}
             >
               <div className="flex flex-col">
@@ -253,91 +258,27 @@ const ShoppingCartPage = () => {
                 </div>
 
                 <div className="mt-10">
-                  <label className="block text-gray-700 text-xs my-2">
-                    Delivery Address:
+                  <label className="block text-gray-700 text-xs my-1">
+                    Delivery Address
                   </label>
                   <input
                     type="text"
                     value={address}
                     onChange={handleAddressChange}
-                    className="text-sm py-2 px-4 w-full border border-gray-300 rounded-md"
-                    placeholder="Enter your delivery address"
+                    className="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:ring focus:ring-blue-300"
                   />
                 </div>
 
-                <div className="mt-6">
-                  <PaystackButton
-                    className="bg-blue-500 hover:bg-blue-600 text-white w-full p-3 rounded-xl"
-                    {...paystackConfig}
-                    text="Proceed to Checkout"
-                    onSuccess={handleSuccess}
-                    onClose={handleClose}
-                  />
-                </div>
+                <PaystackButton
+                  {...paystackConfig}
+                  text="Proceed to Checkout"
+                  className="mt-8 bg-blue-500 text-white rounded-lg p-3"
+                  onSuccess={handleSuccess}
+                  onClose={handleClose}
+                />
               </div>
             </motion.div>
           )}
-        </div>
-        <div className=" py-20 z-10">
-          <h2 className="py-14 text-3xl font-[400]">You may like</h2>
-          <motion.div
-            initial={{ filter: "blur(100px)", opacity: 0 }}
-            whileInView={{ filter: "blur(0px)", opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
-            className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] md:grid-cols-4 pt-0 mt-0 w-full"
-          >
-            {products.map((product, index) => (
-              <Link
-                href={`/product/${product.slug}`}
-                key={product._id}
-                className={`product-card z-30 relative bg-[#F1F1F1] border md:border-b-1 border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
-              ${index % 4 !== 3 ? "md:border-r-0" : ""}  
-              ${index < products.length - 4 ? "md:border-b-1" : ""}`}
-                onMouseEnter={() => setHoveredProduct(product)}
-                onMouseLeave={() => setHoveredProduct(null)}
-              >
-                <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-                <div className="flex justify-between px-5 py-2 relative gap-10 z-40">
-                  <h3 className="uppercase text-sm">{product.name}</h3>
-                  <p className="text-sm">
-                    NGN {product.price.toLocaleString("en-NG")}
-                  </p>
-                </div>
-                <div className="py-20 px-20 relative z-40">
-                  {product.images && (
-                    <Image
-                      src={urlForImage(product.images).url()}
-                      width={150}
-                      height={150}
-                      alt={product.name}
-                      className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[150px] h-[150px] md:w-[250px] md:h-[250px]"
-                    />
-                  )}
-                </div>
-
-                {hoveredProduct?._id === product._id && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="absolute bottom-0 inset-0 right-0 left-0 justify-end flex flex-col gap-2 p-4 rounded-md z-50"
-                  >
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleAddToCart(product);
-                      }}
-                      className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white py-2 px-10 border-none transition-all duration-300 ease-in-out"
-                    >
-                      Add to Cart
-                    </button>
-                  </motion.div>
-                )}
-              </Link>
-            ))}
-          </motion.div>
         </div>
       </motion.div>
     </motion.div>

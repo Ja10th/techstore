@@ -27,15 +27,15 @@ export const Product = {
     },
     {
       name: 'specifications',
-      type: 'text',
+      type: 'blockContent',
       title: 'Specifications',
-      validation: (Rule: { max: (arg0: number) => any; }) => Rule.max(500),
+      validation: (Rule: { max: (arg0: number) => any; }) => Rule.max(5000),
     },
     {
       name: 'features',
-      type: 'text',
+      type: 'blockContent',
       title: 'Key Features',
-      validation: (Rule: { max: (arg0: number) => any; }) => Rule.max(500),
+      validation: (Rule: { max: (arg0: number) => any; }) => Rule.max(5000),
     },
     {
       name: 'price',
@@ -50,10 +50,11 @@ export const Product = {
       validation: (Rule: { required: () => { (): any; new(): any; min: { (arg0: number): any; new(): any; }; }; }) => Rule.required().min(0),
     },
     {
-      name: 'category',
-      type: 'reference',
-      title: 'Category',
-      to: [{ type: 'category' }],
+      name: 'categories', // Changed to 'categories' to indicate multiple categories
+      type: 'array', // Use an array to allow multiple categories
+      title: 'Categories',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      validation: (Rule: { required: () => any; }) => Rule.required(),
     },
     {
       name: 'images',

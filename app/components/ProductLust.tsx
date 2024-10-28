@@ -18,17 +18,23 @@ interface DataType {
 }
 
 async function fetchProducts() {
-  const query = `*[_type == 'product'][0...4] {
+  // Fetch a larger set of products
+  const query = `*[_type == 'product'][0...20] {
     _id,
     name,
     price,
     "slug": slug.current,
-    "category": category -> name,
+    "category": category->name,
     "images": images[0] // Fetch only the first image
   }`;
 
   const data = await client.fetch(query);
-  return data;
+  
+  // Shuffle the array and pick the first 4 items
+  const shuffledProducts = data.sort(() => Math.random() - 0.5);
+  const randomProducts = shuffledProducts.slice(0, 4);
+
+  return randomProducts;
 }
 
 const ProductList = () => {
@@ -47,7 +53,7 @@ const ProductList = () => {
 
   const handleAddToCart = (product: DataType) => {
     addItem({
-      id: product.sku,
+      id: product._id,
       name: product.name,
       price: product.price,
       currency: "USD",
@@ -55,6 +61,7 @@ const ProductList = () => {
       quantity: 1,
     });
   };
+
 
   if (!products.length)
     return (
@@ -65,6 +72,24 @@ const ProductList = () => {
 
   return (
     <div className="relative z-30">
+      <div className="flex justify-between items-center py-20  px-10">
+        <motion.h2
+          initial={{ x: "-100px", opacity: 0 }}
+          whileInView={{ x: "0px", opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1.3, ease: "easeInOut" }}
+          className="text-5xl font-bold"
+        >
+          Best Sellers
+        </motion.h2>
+        <motion.p
+          initial={{ x: "100px", opacity: 0 }}
+          whileInView={{ x: "0px", opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1.3, ease: "easeInOut" }}
+          className="text-sm border border-black rounded-xl px-4 py-2"
+        >
+          View all
+        </motion.p>
+      </div>
       <motion.div
         initial={{ filter: "blur(100px)", opacity: 0 }}
         whileInView={{ filter: "blur(0px)", opacity: 1 }}
@@ -75,7 +100,7 @@ const ProductList = () => {
           <Link
             href={`/product/${product.slug}`}
             key={product._id}
-            className={`product-card z-30 relative bg-[#F1F1F1] border md:border-b-0 border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
+            className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
               ${index % 4 !== 3 ? "md:border-r-0" : ""}  
               ${index < products.length - 4 ? "md:border-b-0" : ""}`}
             onMouseEnter={() => setHoveredProduct(product)}
@@ -122,14 +147,6 @@ const ProductList = () => {
             )}
           </Link>
         ))}
-      </motion.div>
-      <motion.div
-        initial={{ filter: "blur(10px)", opacity: 0 }}
-        whileInView={{ filter: "blur(0px)", opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
-        className="bg-blue-500 hover:underline underline-offset-1 h-14 w-full flex justify-center items-center"
-      >
-        <p className="text-white">Get the Latest</p>
       </motion.div>
     </div>
   );

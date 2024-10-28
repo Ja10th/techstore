@@ -1,77 +1,99 @@
 "use client";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import Floating from "./FloatingTwo";
 
 const ClassifyFirst = () => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
-    <div className="w-full pb-20">
+    <div className="w-full">
+      <Floating/>
       <motion.div
         initial={{ filter: "blur(10px)", opacity: 0 }}
         whileInView={{ filter: "blur(0px)", opacity: 1 }}
         transition={{ delay: 1.2, duration: 1.2, ease: "easeInOut" }}
-        className="flex flex-col md:flex-row h-[1000px] relative"
+        className="flex flex-col md:flex-row h-[2200px] md:h-[500px] relative"
       >
         {/* Image Section */}
         <div className="relative flex-1 group bg-black overflow-hidden">
           {/* Image Section */}
           <img
-            src="https://images.pexels.com/photos/5234774/pexels-photo-5234774.jpeg?auto=compress&cs=tinysrgb&w=800"
+            src="https://images.pexels.com/photos/16149966/pexels-photo-16149966/free-photo-of-get-ready-for-the-future-with-samsung-galaxy-s23.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="Phone Collection"
-            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50"
+            className="w-full h-full object-cover border-b border-t border-black transition-opacity duration-300 group-hover:opacity-50"
           />
 
           {/* Sticky Text for Image */}
           <div
-            className="absolute top-0 left-1/2 transform -translate-x-1/2 text-center"
-            style={{
-              top: `${scrollPosition * 0.5}px`, // Adjust the multiplier to control speed
-              transition: "top 0.1s ease-out",
-            }}
+            className="absolute bottom-4 bg-white border group-hover:bg-black  border-black rounded-2xl py-2 px-4  left-1/2 transform -translate-x-1/2 text-center"
           >
             <a
-              href="/shop-phones"
-              className="text-white underline py-3 px-6 rounded-xl  hover:no-underline text-lg"
+              href="/category/phones"
+              className="text-black group-hover:text-white no-underline py-3 px-6 rounded-xl  hover:underline text-sm"
             >
               Shop Phones
             </a>
           </div>
         </div>
+        <div className="relative flex-1 group bg-black overflow-hidden">
+          {/* Image Section */}
+          <img
+            src="https://images.pexels.com/photos/3945659/pexels-photo-3945659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            alt="Phone Collection"
+            className="w-full h-full object-cover border-b border-t border-black  transition-opacity duration-300 group-hover:opacity-50"
+          />
+
+          {/* Sticky Text for Image */}
+          <div
+            className="absolute bottom-4 bg-white group-hover:bg-black border border-black rounded-2xl py-2 px-4  left-1/2 transform -translate-x-1/2 text-center"
+          >
+            <a
+              href="/category/consoles"
+              className="text-black group-hover:text-white no-underline py-3 px-6 rounded-xl  hover:underline text-sm"
+            >
+              Order Consoles
+            </a>
+          </div>
+        </div>
+            <div className="relative flex-1 group bg-black overflow-hidden">
+              {/* Image Section */}
+              <img
+                src="https://images.pexels.com/photos/2528118/pexels-photo-2528118.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                alt="Phone Collection"
+                className="w-full h-full object-cover border-b border-t border-black  transition-opacity duration-300 group-hover:opacity-50"
+              />
+    
+              {/* Sticky Text for Image */}
+              <div
+                className="absolute bottom-4  bg-white group-hover:bg-black border border-black rounded-2xl py-2 px-4 left-1/2 transform -translate-x-1/2 text-center"
+              >
+                <a
+                  href="/category/laptop"
+                  className="text-black group-hover:text-white no-underline py-3 px-6 rounded-xl  hover:underline text-sm"
+                >
+                  Buy Laptops
+                </a>
+              </div>
+            </div>
 
         {/* Video Section */}
-        <div className="relative flex-1 overflow-hidden">
+        <div className="relative flex-1 overflow-hidden group bg-black">
           {/* Video Section */}
-          <video
-            src="phone.mp4"
-            className="w-full h-full object-cover object-center"
-            autoPlay
-            loop
-            muted
-          />
+          <img
+            src="https://images.pexels.com/photos/7772548/pexels-photo-7772548.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            className="w-full h-full object-cover border-b border-t border-black group-hover:opacity-50 object-center"
+             alt="Phone Collection"
+            />
 
           {/* Sticky Moving Text */}
           <div
-            className="absolute top-0 left-1/2 transform -translate-x-1/2 text-center"
-            style={{
-              top: `${scrollPosition * 0.5}px`, // Adjust the multiplier to control speed
-              transition: "top 0.1s ease-out",
-            }}
+            className="absolute bottom-4 bg-white group-hover:bg-black border border-black py-2 px-4 rounded-2xl left-1/2 transform -translate-x-1/2 text-center"
           >
             <a
-              href="/shop-phones"
-              className="text-black underline py-3 px-6 rounded-xl hover:bg-green-600 text-lg"
+              href="/category/headset"
+              className="text-black group-hover:text-white no-underline py-3 px-6 rounded-xl hover:underline text-sm"
             >
-              Shop Phones
+              Shop Headset
             </a>
           </div>
         </div>

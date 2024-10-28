@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import ProductList from "./components/ProductLust";
 import Floating from "./components/floating";
 import ClassifyFirst from "./components/ClassifyFirst";
+import ProductOne from "./components/ProductOne";
+import Top from "./components/top";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement | null>(null); // Specify type for the ref
@@ -18,13 +20,15 @@ export default function Home() {
 
   return (
     <>
+     <Top />
       <Navbar heroHeight={heroHeight} />
       <div ref={heroRef}>
         <Hero />
       </div>
-      <Floating />
-      <ProductList />
       <ClassifyFirst />
+      <ProductList />
+      <Floating />
+      <ProductOne />
     </>
   );
 }

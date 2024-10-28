@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { contextReader } from "../context/ContextProvider";
 import { PiArrowRightThin } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 interface NavbarProps {
   heroHeight: number;
@@ -42,7 +43,10 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
   // Handle outside clicks
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         closeSearch();
       }
     };
@@ -83,14 +87,14 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={{ filter: "blur(0px)", opacity: 1 }}
           transition={{ delay: 1.2, duration: 1.6, ease: "easeInOut" }}
-          className="absolute top-5  left-1/2 items-center justify-between md:justify-center transform -translate-x-1/2 h-14 z-50 w-full px-20 text-white md:bg-transparent transition-all duration-300"
+          className="absolute top-16  left-1/2 items-center justify-between md:justify-center transform -translate-x-1/2 h-14 z-50 w-full px-20 text-white md:bg-transparent transition-all duration-300"
         >
           <div className="flex items-center justify-center gap-10">
             <Link href="/">
-              <BsFillArrowUpRightCircleFill className="text-4xl md:text-2xl border border-black text-black bg-white rounded-full" />
+              <p>Infoworld Global</p>
             </Link>
-            <div className="hidden md:flex items-center gap-4 text-xs font-light">
-              <Link href="/" className="hover:scale-105">
+            <div className="hidden md:flex items-center gap-6 text-xs font-light">
+              <Link href="/category/all" className="hover:scale-105">
                 Shop
               </Link>
               <Link href="/about" className="hover:scale-105">
@@ -116,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
                 onClick={handleSearchOpen} // Open search modal
               />
               <div className="relative" onClick={toggleCart}>
-                <BsMinecart className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+                <HiOutlineShoppingBag className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
                 <span className="absolute top-[-5px] right-[-10px] text-xs bg-black text-white font-black rounded-full px-1">
                   {cartCount}
                 </span>
@@ -132,11 +136,11 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={{ filter: "blur(0px)", opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6, ease: "easeInOut" }}
-          className="fixed left-1/2 items-center justify-center transform -translate-x-1/2 h-14 z-50 w-full px- py-4 bg-white text-black border-b transition-all duration-300"
+          className="fixed left-1/2 top-0 items-center justify-center transform -translate-x-1/2 h-14 z-50 w-full px- py-4 bg-white text-black border-b transition-all duration-300"
         >
           <div className="flex items-center justify-center gap-10">
             <Link href="/">
-              <BsFillArrowUpRightCircleFill className="text-2xl border border-black text-black bg-white rounded-full" />
+              <p>Infoworld Global</p>
             </Link>
             <div className="hidden md:flex items-center gap-4 text-xs font-light">
               <Link href="/" className="hover:scale-105">
@@ -165,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
                 onClick={handleSearchOpen} // Open search modal
               />
               <div className="relative" onClick={toggleCart}>
-                <BsMinecart className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+                <HiOutlineShoppingBag className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
                 <span className="absolute top-[-5px] right-[-10px] text-xs bg-black text-white font-black rounded-full px-1">
                   {cartCount}
                 </span>
@@ -174,7 +178,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           </div>
         </motion.div>
       )}
-      
+
       {isSearchOpen && (
         <motion.div
           ref={searchRef}
@@ -182,7 +186,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="absolute top-12 left-0 h-[300px] bg-white py-5 w-full z-50"
+          className="absolute top-14 border-t border-b border border-black left-0 h-[300px] bg-white py-5 w-full z-50"
         >
           <div className="max-w-md mx-auto">
             <form onSubmit={handleSearch} className="flex items-center w-full">
@@ -204,10 +208,22 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
             </form>
             <div className="pt-5">
               <p className="text-xs py-4 font-extralight">Quick Links</p>
-              <p className="flex items-center gap-3 py-1 text-xs font-medium"><PiArrowRightThin />Find a store</p>
-              <p className="flex items-center gap-3 py-1 text-xs font-medium"><PiArrowRightThin />Laptops</p>
-              <p className="flex items-center gap-3 py-1 text-xs font-medium"><PiArrowRightThin />Wifi</p>
-              <p className="flex items-center gap-3 py-1 text-xs font-medium"><PiArrowRightThin />Gift Ideas</p>
+              <p className="flex items-center gap-3 py-1 text-xs font-medium">
+                <PiArrowRightThin />
+                Find a store
+              </p>
+              <p className="flex items-center gap-3 py-1 text-xs font-medium">
+                <PiArrowRightThin />
+                Laptops
+              </p>
+              <p className="flex items-center gap-3 py-1 text-xs font-medium">
+                <PiArrowRightThin />
+                Wifi
+              </p>
+              <p className="flex items-center gap-3 py-1 text-xs font-medium">
+                <PiArrowRightThin />
+                Gift Ideas
+              </p>
             </div>
           </div>
         </motion.div>
