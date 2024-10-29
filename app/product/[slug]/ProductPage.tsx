@@ -7,6 +7,8 @@ import NavbarCart from "@/app/components/NavbarCart";
 import Top from "@/app/components/top";
 import Image from "next/image";
 import Link from "next/link";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { RichTextComponent } from "@/app/components/RichTextComponent";
 import { PortableText } from "@portabletext/react";
 import { IoIosArrowDropdown } from "react-icons/io";
@@ -15,6 +17,8 @@ import { useShoppingCart } from "use-shopping-cart";
 import { PaystackButton } from "react-paystack";
 import { client } from "@/sanity/lib/client";
 import { AiFillStar } from "react-icons/ai";
+import { IoHeartCircleOutline } from "react-icons/io5";
+import { account, databases, ID } from "@/app/appwrite";
 
 interface DataFact {
   _id: string;
@@ -163,8 +167,36 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
     });
   };
 
+  const handleAddToWishlist = async (productId: any) => {
+    try {
+      // Check if user is logged in
+      const user = await account.get();
+      if (!user) {
+        toast.error('Please log in to add items to your wishlist.');
+        return;
+      }
+  
+      // Add to wishlist in Appwrite
+      await databases.createDocument(
+        '6720dace00204fde7db8',     // Database ID
+        '672108d90023dbb89309',            // Collection ID
+        ID.unique(),            // Automatically generated unique ID
+        {                       // Data
+          user_id: user.$id,
+          product_id: productId,
+        }
+      );
+  
+      toast.success('Item added to your wishlist!');
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      toast.error('Failed to add item to wishlist');
+    }
+  };
+
   return (
     <div>
+      <ToastContainer />
       <Top />
       <Floating />
       <NavbarCart heroHeight={0} />
@@ -179,7 +211,7 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
                   key={index}
                   className="flex-shrink-0 px-10 md:px-10 py-20 md:py-20 bg-[#F1F1F1] relative border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 rounded-md"
                 >
-                    <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+                  <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
                   <Image
                     src={urlForImage(image).url()}
                     alt={data.name}
@@ -207,12 +239,21 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
                 NGN {(data.price + 30000).toLocaleString("en-NG")}
               </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex items-center gap-4">
               <small>Items left: {data.stock}</small>
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <AiFillStar key={i} />
                 ))}
+              </div>
+              <div className="relative group">
+                <IoHeartCircleOutline
+                  className="text-green-700 text-3xl cursor-pointer"
+                  onClick={() => handleAddToWishlist(data._id)}
+                />
+                <div className="absolute top-[-10px] left-0 text-center transform -translate-y-full bg-white border border-black text-black text-sm px-2 w-32 justify-center items-center flex py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  Add to Wishlist
+                </div>
               </div>
             </div>
             <p className="font-light text-[16px] text-left leading-6 pt-5 pb-10">

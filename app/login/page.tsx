@@ -18,13 +18,11 @@ const Login = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Check if there is an active session
         const user = await account.get();
         if (user) {
-          router.push('/user-profile'); // Redirect to user profile if logged in
+          router.push('/user-profile'); 
         }
       } catch (error) {
-        // If there's no active session, continue with the login
         console.error("No active session found:", error);
       }
     };
