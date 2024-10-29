@@ -18,7 +18,7 @@ const ProductOne = () => {
           </div>
           <div className="max-w-md">
           <MdMarkunreadMailbox className="mb-4 text-6xl" />
-            <p className="font-light text-gray-500"><span className="text-black font-bold">Effortless productivity in one sleek package.</span> With an ultra-slim design and vibrant display, this laptop workspace transforms any environment into a hub of focus and creativity. Built for smooth multitasking, it powers through complex tasks, keeping you efficient without missing a beat. The keyboard is finely tuned for comfort, making long work sessions feel light and easy.</p>
+            <p className="font-light text-base text-gray-500"><span className="text-black font-bold">Effortless productivity in one sleek package.</span> With an ultra-slim design and vibrant display, this laptop workspace transforms any environment into a hub of focus and creativity. Built for smooth multitasking, it powers through complex tasks, keeping you efficient without missing a beat. The keyboard is finely tuned for comfort, making long work sessions feel light and easy.</p>
           </div>
         </div>
       </div>

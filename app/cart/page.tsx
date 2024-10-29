@@ -13,6 +13,7 @@ import NavbarCart from "../components/NavbarCart";
 import { motion } from "framer-motion";
 import { client } from "@/sanity/lib/client";
 import { urlForImage } from "../components/AddtoCart";
+import { account } from "../appwrite";
 
 interface DataType {
   images: any;
@@ -59,6 +60,23 @@ const ShoppingCartPage = () => {
 
   const safeCartCount = cartCount ?? 0;
   const safeTotalPrice = totalPrice ?? 0;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const session = await account.getSession("current");
+        setIsAuthenticated(true); // If session exists, user is authenticated
+      } catch (error) {
+        setIsAuthenticated(false); // No session, user is not authenticated
+      } finally {
+        setLoadingAuth(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value);
@@ -74,6 +92,8 @@ const ShoppingCartPage = () => {
   }, []);
 
   const handleAddToCart = (product: DataType, quantity: number) => {
+
+
     const existingItem = cartDetails[product.sku]; // Check if the item already exists in the cart
     if (existingItem) {
       // If it exists, increment by selected quantity
@@ -269,13 +289,23 @@ const ShoppingCartPage = () => {
                   />
                 </div>
 
-                <PaystackButton
-                  {...paystackConfig}
-                  text="Proceed to Checkout"
-                  className="mt-8 bg-blue-500 text-white rounded-lg p-3"
-                  onSuccess={handleSuccess}
-                  onClose={handleClose}
-                />
+                <div className="mt-8">
+                  {isAuthenticated ? (
+                    <PaystackButton
+                      {...paystackConfig}
+                      text="Proceed to Checkout"
+                      className="bg-blue-500 text-white rounded-lg p-3"
+                      onSuccess={handleSuccess}
+                      onClose={handleClose}
+                    />
+                  ) : (
+                    <Link href="/login">
+                      <button className="bg-blue-500 text-white rounded-lg p-3">
+                        Log in to proceed
+                      </button>
+                    </Link>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}

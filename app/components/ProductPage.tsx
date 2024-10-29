@@ -52,9 +52,9 @@ const ProductPage = ({
       <Top />
       <Floating />
       <Navbar heroHeight={0} />
-      <div className="bg-white h-full flex">
-        <aside className="py-60 px-5 hidden md:block w-1/5">
-          <ul className="space-y-2  py-8 px-10">
+      <div className="bg-white h-full flex flex-col md:flex-row">
+        <aside className="pt-40 pb-5 md:py-60 px-5 w-1/5">
+          <ul className="space-y-2 flex md:flex-col  py-8 px-10 transition-all duration-500 ease-in-out">
             {categories.map((cat) => {
               // Define icons for each category
               let IconComponent;
@@ -77,12 +77,12 @@ const ProductPage = ({
 
               return (
                 <li key={cat}>
-                  <Link href={`/category/${cat.toLowerCase()}`}>
+                  <Link href={`/category/${cat.toLowerCase()}`} >
                     <p
-                      className={`flex items-center space-x-2 px-12 py-4 text-sm capitalize rounded-md ${
+                      className={`flex items-center space-x-2 px-2 md:px-12 py-6 text-sm capitalize rounded-md ${
                         cat.toLowerCase() === category.toLowerCase()
-                          ? "bg-blue-500 py-2 rounded-2xl text-white"
-                          : "border border-gray-300 text-black"
+                          ? "bg-blue-500 rounded-2xl text-white"
+                          : " bg-gray-100  text-black"
                       }`}
                     >
                       {IconComponent && <IconComponent className="text-lg" />}{" "}
@@ -98,7 +98,7 @@ const ProductPage = ({
 
         <main className="flex-1">
           <div className="px-10 mx-auto">
-            <div className="pt-40 pb-10">
+            <div className="pt-5 md:pt-40 pb-10">
               <h2 className="text-4xl font-bold text-center md:text-left capitalize text-black">
                 {category} Products
               </h2>
@@ -144,7 +144,7 @@ const ProductPage = ({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.5, ease: "easeInOut" }}
-                      className="absolute bottom-0 inset-0 right-0 left-0 justify-end flex flex-col gap-2 p-4 rounded-md z-50"
+                      className="absolute bottom-0 inset-0 right-0 left-0 justify-end flex flex-col gap-2 p-4 rounded-md z-50 "
                     >
                       <button
                         onClick={(e) => {

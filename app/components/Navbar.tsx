@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={{ filter: "blur(0px)", opacity: 1 }}
           transition={{ delay: 1.2, duration: 1.6, ease: "easeInOut" }}
-          className="absolute top-16  left-1/2 items-center justify-between md:justify-center transform -translate-x-1/2 h-14 z-50 w-full px-20 text-white md:bg-transparent transition-all duration-300"
+          className="absolute top-16  left-1/2 items-center justify-between md:justify-center transform -translate-x-1/2 h-14 z-50 w-full px-20 text-white md:bg-transparent transition-all duration-500 ease-in-out"
         >
           <div className="flex items-center justify-center gap-10">
             <Link href="/">
@@ -111,10 +111,9 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <RiUser4Line
-                onClick={toggleModal}
-                className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
-              />
+              <Link href="/login">
+                <RiUser4Line className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+              </Link>
               <RiSearch2Line
                 className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
                 onClick={handleSearchOpen} // Open search modal
@@ -136,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={{ filter: "blur(0px)", opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6, ease: "easeInOut" }}
-          className="fixed left-1/2 top-0 items-center justify-center transform -translate-x-1/2 h-14 z-50 w-full px- py-4 bg-white text-black border-b transition-all duration-300"
+          className="fixed left-1/2 top-0 items-center justify-center transform -translate-x-1/2 h-14 z-50 w-full px- py-4 bg-white text-black border-b transition-all duration-500 ease-in-out"
         >
           <div className="flex items-center justify-center gap-10">
             <Link href="/">
@@ -160,10 +159,9 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <RiUser4Line
-                onClick={toggleModal}
-                className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
-              />
+              <Link href="/login">
+                <RiUser4Line className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+              </Link>
               <RiSearch2Line
                 className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
                 onClick={handleSearchOpen} // Open search modal

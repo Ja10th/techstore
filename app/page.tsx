@@ -7,6 +7,8 @@ import Floating from "./components/floating";
 import ClassifyFirst from "./components/ClassifyFirst";
 import ProductOne from "./components/ProductOne";
 import Top from "./components/top";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement | null>(null); // Specify type for the ref
@@ -29,6 +31,7 @@ export default function Home() {
       <ProductList />
       <Floating />
       <ProductOne />
+      <ToastContainer />
     </>
   );
 }

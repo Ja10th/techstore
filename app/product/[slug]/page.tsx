@@ -14,6 +14,7 @@ interface DataFact {
   price_id: string;
   specifications: any;
   features: any;
+  stock: number;
 }
 
 interface DataType {
@@ -33,6 +34,7 @@ async function getData(slug: string) {
     images,
     price,
     sku,
+    stock,
     description,
     "category": category -> name,
     "slug": slug.current,

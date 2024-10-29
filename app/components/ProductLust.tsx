@@ -120,7 +120,7 @@ const ProductList = () => {
                   width={150}
                   height={150}
                   alt={product.name}
-                  className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[200px] h-[200px] md:w-[250px] md:h-[250px]"
+                  className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[200px] h-[200px] md:w-auto md:h-[250px]"
                 />
               )}
             </div>

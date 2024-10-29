@@ -20,7 +20,7 @@ const ClassifyFirst = () => {
           <img
             src="https://images.pexels.com/photos/16149966/pexels-photo-16149966/free-photo-of-get-ready-for-the-future-with-samsung-galaxy-s23.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="Phone Collection"
-            className="w-full h-full object-cover border-b border-t border-black transition-opacity duration-300 group-hover:opacity-50"
+            className="w-full h-full object-cover border-b border-t border-black  group-hover:opacity-50 group-hover:scale-125 overflow-hidden transition-all duration-500 ease-in-out"
           />
 
           {/* Sticky Text for Image */}
@@ -40,7 +40,7 @@ const ClassifyFirst = () => {
           <img
             src="https://images.pexels.com/photos/3945659/pexels-photo-3945659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="Phone Collection"
-            className="w-full h-full object-cover border-b border-t border-black  transition-opacity duration-300 group-hover:opacity-50"
+            className="w-full h-full object-cover border-b border-t border-black   group-hover:opacity-50 group-hover:scale-125 overflow-hidden transition-all duration-500 ease-in-out"
           />
 
           {/* Sticky Text for Image */}
@@ -60,7 +60,7 @@ const ClassifyFirst = () => {
               <img
                 src="https://images.pexels.com/photos/2528118/pexels-photo-2528118.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt="Phone Collection"
-                className="w-full h-full object-cover border-b border-t border-black  transition-opacity duration-300 group-hover:opacity-50"
+                className="w-full h-full object-cover border-b border-t border-black group-hover:opacity-50  group-hover:scale-150  overflow-hidden transition-all duration-500 ease-in-out"
               />
     
               {/* Sticky Text for Image */}
@@ -81,7 +81,7 @@ const ClassifyFirst = () => {
           {/* Video Section */}
           <img
             src="https://images.pexels.com/photos/7772548/pexels-photo-7772548.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            className="w-full h-full object-cover border-b border-t border-black group-hover:opacity-50 object-center"
+            className="w-full h-full object-cover border-b border-t border-black group-hover:opacity-50 object-center  group-hover:scale-125 overflow-hidden transition-all duration-500 ease-in-out"
              alt="Phone Collection"
             />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddtoCart, { urlForImage } from "@/app/components/AddtoCart";
 import Floating from "@/app/components/floating";
 import NavbarCart from "@/app/components/NavbarCart";
@@ -12,6 +12,9 @@ import { PortableText } from "@portabletext/react";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { motion } from "framer-motion";
 import { useShoppingCart } from "use-shopping-cart";
+import { PaystackButton } from "react-paystack";
+import { client } from "@/sanity/lib/client";
+import { AiFillStar } from "react-icons/ai";
 
 interface DataFact {
   _id: string;
@@ -25,6 +28,7 @@ interface DataFact {
   price_id: string;
   specifications: any;
   features: any;
+  stock: number;
 }
 
 interface DataType {
@@ -37,27 +41,104 @@ interface DataType {
   productImage: string;
 }
 
+interface DataThree {
+  images: any;
+  _id: string;
+  name: string;
+  price: number;
+  slug: string;
+  category: string;
+  sku: string;
+}
+
+async function fetchRandomProduct() {
+  const query = `*[_type == 'product'][0..9] { // Fetch first 10 products
+    _id,
+    name,
+    price,
+    "slug": slug.current,
+    "category": category->name,
+    "images": images[0]
+  }`;
+
+  const data = await client.fetch(query);
+  // Pick a random product from the fetched list
+  return data[Math.floor(Math.random() * data.length)];
+}
+
 const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
   data,
   otherProducts,
 }) => {
   // State for quantity
-
-  const [quantity, setQuantity] = useState(1);
   const [hoveredProduct, setHoveredProduct] = useState<DataType | null>(null);
-  const {
-    addItem,
-    cartDetails = {},
-    incrementItem,
-    decrementItem,
-  } = useShoppingCart(); // Ensure these are imported
+  const [product, setProduct] = useState<DataThree | null>(null);
+  const [frequentlyBought, setFrequentlyBought] = useState<DataThree | null>(
+    null
+  );
+  const [youMayLike, setYouMayLike] = useState<DataType[]>([]);
+  const { addItem } = useShoppingCart();
 
-  const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
+  useEffect(() => {
+    const loadProduct = async () => {
+      const randomProduct = await fetchRandomProduct();
+      setProduct(randomProduct);
+
+      // Fetch frequently bought products (using DataThree type)
+      const randomFrequentlyBought = await fetchRandomProduct(); // Fetch one random product
+      setFrequentlyBought(randomFrequentlyBought);
+
+      // Shuffle other products for "You May Like" section
+      const randomYouMayLike = otherProducts
+        .sort(() => 0.5 - Math.random()) // Shuffle the other products
+        .slice(0, 3); // Take the first 3 for "You May Like"
+      setYouMayLike(randomYouMayLike);
+    };
+
+    loadProduct();
+  }, [otherProducts]);
+
+  const handleAddToCartThree = () => {
+    if (frequentlyBought) {
+      addItem({
+        id: frequentlyBought._id,
+        name: frequentlyBought.name,
+        price: frequentlyBought.price,
+        currency: "USD",
+        image: urlForImage(frequentlyBought.images).url(),
+        quantity: 1,
+      });
+    }
   };
 
-  const decrementQuantity = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
+  const paystackConfig = {
+    email: "customer@example.com", // Replace with user's email
+    amount: data.price * 100, // Paystack expects the amount in kobo
+    publicKey: "pk_test_110f5d5fffad6bc1dae024858bb6e25cb2924994",
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Customer Name",
+          variable_name: "customer_name",
+          value: "Anonymous User", // Replace with actual customer name
+        },
+        {
+          display_name: "Product Name",
+          variable_name: "product_name",
+          value: data.name,
+        },
+      ],
+    },
+  };
+
+  const handleSuccess = (reference: any) => {
+    console.log("Payment Successful, reference:", reference);
+    // Handle success actions, like redirecting to a thank you page
+  };
+
+  const handleClose = () => {
+    console.log("Payment dialog closed");
+    // Handle what happens when the payment dialog is closed
   };
 
   const handleAddToCart = (product: DataType) => {
@@ -70,36 +151,16 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
       quantity: 1,
     });
   };
-  const handleAddToCartTwo = (data: DataFact, quantity: number) => {
-    console.log("Adding to cart with quantity:", quantity);
 
-    // Check if the item is already in the cart
-    const existingItem = cartDetails[data._id];
-
-    if (existingItem) {
-      // Log existing quantity
-      console.log(
-        `Current quantity of ${data.name} in cart:`,
-        existingItem.quantity
-      );
-
-      // If the item exists, increment its quantity
-      // Update the existing item's quantity by adding the new quantity
-      incrementItem(data._id, { count: quantity });
-    } else {
-      // If it doesn't exist, add it with the specified quantity
-      addItem({
-        id: data._id,
-        name: data.name,
-        price: data.price,
-        currency: "USD",
-        image: urlForImage(data.images[0]).url(),
-        quantity: quantity, // Use the current quantity in state
-      });
-    }
-
-    // Log to verify the quantity being passed
-    console.log(`Adding ${quantity} of ${data.name} to cart`);
+  const handleAddToCartTwo = () => {
+    addItem({
+      id: data._id,
+      name: data.name,
+      price: data.price,
+      currency: "USD",
+      image: urlForImage(data.images[0]).url(),
+      quantity: 1,
+    });
   };
 
   return (
@@ -109,66 +170,68 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
       <NavbarCart heroHeight={0} />
       <div className="max-w-6xl py-40 mx-auto px-8">
         {/* Product details */}
-        <div className="grid gap-14 md:grid-cols-2">
+        <div className="flex flex-col justify-center gap-14 md:flex-row">
           {/* Left Section: Images */}
-          <div className="flex flex-col  items-center justify-center md:py-8">
-            {data.images.map((image: any, index: number) => (
-              <div
-                key={index}
-                className={`mb-2 px-20 py-10 items-center justify-center relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700   ${index === 0 ? "rounded-t-0" : ""} ${index === data.images.length - 1 ? "rounded-b-0" : ""}`}
-              >
-                <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-                <Image
-                  src={urlForImage(image).url()}
-                  alt={data.name}
-                  className="object-contain w-[250px] h-[250px]"
-                  width={500} // Adjust width as needed
-                  height={500} // Adjust height as needed
-                />
-              </div>
-            ))}
+          <div className="flex flex-col md:overflow-hidden pt-10">
+            <div className="flex md:flex-col overflow-x-auto space-x-4 md:space-x-0 gap-4 pb-4 md:pb-0">
+              {data.images.map((image: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 px-10 md:px-10 py-20 md:py-20 bg-[#F1F1F1] relative border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 rounded-md"
+                >
+                    <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+                  <Image
+                    src={urlForImage(image).url()}
+                    alt={data.name}
+                    className="object-contain w-full h-full"
+                    width={250} // Adjusted width
+                    height={250} // Adjusted height
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right Section: Product Info */}
-          <div className="md:py-8">
-            <h2 className="text-2xl font-bold text-center text-gray-800 lg:text-4xl">
+          <div className="md:py-8 max-w-lg">
+            <h2 className="text-2xl text-left font-light lg:text-3xl">
               {data.name}
             </h2>
-            <p className="text-lg text-center text-gray-500 py-2">
-              {" "}
-              NGN {data.price.toLocaleString("en-NG")}
-            </p>
-            <p className="text-gray-600 text-sm text-center py-10">
+            <div className="flex gap-3">
+              <p className="text-3xl text-left font-bold py-2">
+                {" "}
+                NGN {data.price.toLocaleString("en-NG")}
+              </p>
+              <p className="text-2xl text-gray-500  mt-1 text-left line-through font-light py-2">
+                {" "}
+                NGN {(data.price + 30000).toLocaleString("en-NG")}
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <small>Items left: {data.stock}</small>
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <AiFillStar key={i} />
+                ))}
+              </div>
+            </div>
+            <p className="font-light text-[16px] text-left leading-6 pt-5 pb-10">
               {data.description}
             </p>
-            <div className="flex gap-4  justify-center">
-              <div className="flex bg-gray-100 px-2 rounded-2xl items-center justify-center">
-                <button onClick={decrementQuantity} className="">
-                  -
-                </button>
-                <input
-                  type="number"
-                  className="bg-gray-100 text-center w-full"
-                  value={quantity}
-                  onChange={(e) => {
-                    const value = Math.max(1, Number(e.target.value)); // Ensure quantity is at least 1
-                    setQuantity(value);
-                  }}
-                />
-                <button onClick={incrementQuantity} className="">
-                  +
-                </button>
-              </div>
+            <div className="flex gap-4  justify-start ">
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleAddToCartTwo(data, quantity);
-                }}
-                className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white py-2 px-10 border-none transition-all duration-300 ease-in-out"
+                onClick={handleAddToCartTwo}
+                className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white py-2 px-20 border-none transition-all duration-300 ease-in-out"
               >
                 Add to Cart
               </button>
+              <PaystackButton
+                {...paystackConfig}
+                text="Buy Now"
+                className=" border border-black hover:bg-black hover:text-white rounded-xl text-black py-2 px-20 transition-all duration-300 ease-in-out"
+                onSuccess={handleSuccess}
+                onClose={handleClose}
+              />
             </div>
             <div className="py-20">
               <div className="accordion border-b pb-2">
@@ -177,12 +240,12 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
                   htmlFor="specifications"
                   className="flex justify-between items-center cursor-pointer"
                 >
-                  <span className="text-sm uppercase">Specifications</span>
+                  <span className="text-md uppercase">Specifications</span>
                   <span className="text-xl">
                     <IoIosArrowDropdown />
                   </span>
                 </label>
-                <div className="mt-2 pl-2 hidden accordion-content">
+                <div className="mt-2 pl-2 transition-all duration-300 overflow-hidden  accordion-content">
                   {data.specifications ? (
                     <PortableText
                       value={data.specifications}
@@ -201,12 +264,12 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
                   htmlFor="keyFeatures"
                   className="flex justify-between items-center cursor-pointer"
                 >
-                  <span className="uppercase text-sm"> Key Features</span>
+                  <span className="uppercase text-md"> Key Features</span>
                   <span className="text-xl">
                     <IoIosArrowDropdown />
                   </span>
                 </label>
-                <div className="mt-2 pl-2 hidden accordion-content">
+                <div className="mt-2 pl-2 transition-all duration-300 overflow-hidden  accordion-content">
                   {data.features ? (
                     <PortableText
                       value={data.features}
@@ -217,11 +280,38 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
                   )}
                 </div>
               </div>
-              <div className="mt-12">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+              <div className="flex flex-col justify-start  transition-all duration-500 ease-in-out rounded-2xl  ">
+                <h2 className="text-left text-2xl py-10">
                   Frequently Bought Together
-                </h3>
-                <div></div>
+                </h2>
+                {frequentlyBought && (
+                  <>
+                    <div
+                      key={frequentlyBought._id}
+                      className="flex border   hover:scale-110 transition duration-500 ease-in-out h-36 w-full  rounded-2xl"
+                    >
+                      <div className="bg-gray-300 w-1/2 h-full px-4 flex rounded-l-2xl justify-center items-center">
+                        <img
+                          src={urlForImage(frequentlyBought.images).url()}
+                          alt={frequentlyBought.name}
+                          className="bg-transparent h-24 w-auto rounded-l-2xl"
+                        />
+                      </div>
+                      <div className=" w-1/2 flex flex-col justify-center items-center ">
+                        <h3 className="text-lg">{frequentlyBought.name}</h3>
+                        <p className="text-sm text-gray-500">
+                          NGN {frequentlyBought.price.toLocaleString("en-NG")}
+                        </p>
+                        <button
+                          onClick={handleAddToCartThree}
+                          className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white mt-2 py-2 px-1 md:px-4 text-[12px]  border-none transition-all duration-300 ease-in-out"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -229,8 +319,8 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
 
         {/* Horizontal scrolling section for other products */}
       </div>
-      <div className="mt-6 px-10">
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+      <div className="mt-6 px-1 md:px-10">
+        <h3 className="text-2xl text-center md:text-left font-semibold text-gray-800 mb-6">
           You may also like
         </h3>
         <div className="grid grid-cols-1 z-30 px-10 md:px-0 gap-y-2 md:gap-y-0 md:grid-cols-4 pt-0 mt-0 w-full">
@@ -241,6 +331,8 @@ const ProductPage: React.FC<{ data: DataFact; otherProducts: DataType[] }> = ({
               className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
                 ${index % 4 !== 3 ? "md:border-r-0" : ""}  
                 ${index < otherProducts.length - 4 ? "md:border-b-0" : ""}`}
+              onMouseEnter={() => setHoveredProduct(product)}
+              onMouseLeave={() => setHoveredProduct(null)}
             >
               <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
               <div className="flex justify-between px-5 py-6 md:py-12 relative gap-10 z-40">

@@ -111,10 +111,9 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <RiUser4Line
-                onClick={toggleModal}
-                className="text-lg cursor-pointer hover:scale-150 transition-transform"
-              />
+              <Link href="/login">
+                <RiUser4Line className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+              </Link>
               <RiSearch2Line
                 className="text-md cursor-pointer hover:scale-150 transition-transform"
                 onClick={() => setIsSearchOpen(true)} // Open search modal
@@ -158,10 +157,9 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <RiUser4Line
-                onClick={toggleModal}
-                className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
-              />
+              <Link href="/login">
+                <RiUser4Line className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform" />
+              </Link>
               <RiSearch2Line
                 className="text-2xl md:text-lg cursor-pointer hover:scale-150 transition-transform"
                 onClick={handleSearchOpen} // Open search modal
@@ -176,7 +174,7 @@ const Navbar: React.FC<NavbarProps> = ({ heroHeight }) => {
           </div>
         </motion.div>
       )}
-       {isSearchOpen && (
+      {isSearchOpen && (
         <motion.div
           ref={searchRef}
           initial={{ opacity: 0, y: -20 }}
