@@ -54,7 +54,7 @@ const ProductPage = ({
       <Navbar heroHeight={0} />
       <div className="bg-white h-full flex flex-col md:flex-row">
         <aside className="pt-40 pb-5 md:py-60 px-5 w-1/5">
-          <ul className="space-y-2 flex md:flex-col  py-8 px-10 transition-all duration-500 ease-in-out">
+          <ul className=" flex md:flex-col  transition rounded-3xl  bg-gray-100   duration-1000 ease-in-out">
             {categories.map((cat) => {
               // Define icons for each category
               let IconComponent;
@@ -76,13 +76,13 @@ const ProductPage = ({
               }
 
               return (
-                <li key={cat}>
+                <li key={cat} className=""> 
                   <Link href={`/category/${cat.toLowerCase()}`} >
                     <p
-                      className={`flex items-center space-x-2 px-2 md:px-12 py-6 text-sm capitalize rounded-md ${
+                      className={`flex items-center space-x-2 px-2 md:px-12 py-6 rounded-2xl text-sm capitalize ${
                         cat.toLowerCase() === category.toLowerCase()
-                          ? "bg-blue-500 rounded-2xl text-white"
-                          : " bg-gray-100  text-black"
+                          ? "bg-gray-200  rounded-2xl text-black"
+                          : "  text-black"
                       }`}
                     >
                       {IconComponent && <IconComponent className="text-lg" />}{" "}
@@ -99,8 +99,8 @@ const ProductPage = ({
         <main className="flex-1">
           <div className="px-10 mx-auto">
             <div className="pt-5 md:pt-40 pb-10">
-              <h2 className="text-4xl font-bold text-center md:text-left capitalize text-black">
-                {category} Products
+              <h2 className="text-5xl font-bold text-center capitalize text-black">
+                {category} 
               </h2>
             </div>
             <motion.div

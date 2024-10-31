@@ -3,12 +3,12 @@ import { MdMarkunreadMailbox } from "react-icons/md";
 
 const ProductOne = () => {
   return (
-    <div className="py-20">
+      <div className="py-20 bg-[#F5F5F7]">
       <div>
         <h2 className="text-center text-[40px] md:text-[110px] font-bold">
           Sleek Workforce
         </h2>
-        <div className="flex flex-col md:flex-row gap-10 px-10 md:px-0 items-center py-10 justify-center ">
+        <div className="flex flex-col md:flex-row gap-20 px-10 md:px-0 items-center py-10 justify-center ">
           <div>
             <img
               src="https://images.pexels.com/photos/2528116/pexels-photo-2528116.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -18,7 +18,7 @@ const ProductOne = () => {
           </div>
           <div className="max-w-md">
           <MdMarkunreadMailbox className="mb-4 text-6xl" />
-            <p className="font-light text-base text-gray-500"><span className="text-black font-bold">Effortless productivity in one sleek package.</span> With an ultra-slim design and vibrant display, this laptop workspace transforms any environment into a hub of focus and creativity. Built for smooth multitasking, it powers through complex tasks, keeping you efficient without missing a beat. The keyboard is finely tuned for comfort, making long work sessions feel light and easy.</p>
+            <p className=" text-lg text-gray-500"><span className="text-black font-bold">Effortless productivity in one sleek package.</span> With an ultra-slim design and vibrant display, this laptop workspace transforms any environment into a hub of focus and creativity. Built for smooth multitasking, it powers through complex tasks, keeping you efficient without missing a beat. The keyboard is finely tuned for comfort, making long work sessions feel light and easy.</p>
           </div>
         </div>
       </div>

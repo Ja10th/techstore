@@ -9,6 +9,7 @@ import ProductOne from "./components/ProductOne";
 import Top from "./components/top";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Sleek from "./components/Sleek";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement | null>(null); // Specify type for the ref
@@ -31,6 +32,7 @@ export default function Home() {
       <ProductList />
       <Floating />
       <ProductOne />
+      <Sleek />
       <ToastContainer />
     </>
   );

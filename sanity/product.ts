@@ -50,8 +50,8 @@ export const Product = {
       validation: (Rule: { required: () => { (): any; new(): any; min: { (arg0: number): any; new(): any; }; }; }) => Rule.required().min(0),
     },
     {
-      name: 'categories', // Changed to 'categories' to indicate multiple categories
-      type: 'array', // Use an array to allow multiple categories
+      name: 'categories',
+      type: 'array',
       title: 'Categories',
       of: [{ type: 'reference', to: [{ type: 'category' }] }],
       validation: (Rule: { required: () => any; }) => Rule.required(),
@@ -73,6 +73,12 @@ export const Product = {
       name: 'isFeatured',
       type: 'boolean',
       title: 'Featured Product',
+    },
+    {
+      name: 'brand', // New field added for the brand
+      type: 'string',
+      title: 'Brand',
+      validation: (Rule: { required: () => any; }) => Rule.required(), // Optional: make it required if needed
     },
   ],
 };

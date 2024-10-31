@@ -81,7 +81,7 @@ const Hero = () => {
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1.4, ease: "easeInOut" }}
+        transition={{ delay: 0.7, duration: 0.9, ease: "easeInOut" }}
         className="absolute top-[20%] md:top-[35%] left-1 text-center md:text-left md:left-20 transform -translate-y-1/2 max-w-4xl md:max-w-5xl z-20"
       >
         <h1 className="text-3xl px-6 hero md:px-0 md:text-[90px] leading-none font-bold pt-10 md:pt-0 font-mono text-white">
@@ -100,7 +100,7 @@ const Hero = () => {
       <motion.div
         initial={{ filter: "blur(10px)", opacity: 0 }}
         whileInView={{ filter: "blur(0px)", opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1.2, ease: "easeInOut" }}
+        transition={{ delay: 0.6, duration: 0.8, ease: "easeInOut" }}
         className="relative z-10"
       >
         <img
@@ -112,8 +112,8 @@ const Hero = () => {
       <motion.div
        initial={{ filter: "blur(20px)", opacity: 0 }}
        whileInView={{ filter: "blur(0px)", opacity: 1 }}
-       transition={{ delay: 1.2, duration: 1.2, ease: "easeInOut" }}
-      className="bg-white h-28 w-60 hover:scale-110 transition-all duration-500 ease-in-out rounded-2xl absolute flex right-[10%] bottom-[60%] z-50">
+       transition={{ delay: 0.7, duration: 0.9, ease: "easeInOut" }}
+      className="bg-white h-28 w-60 hover:scale-110 transition-all duration-500 ease-in-out rounded-2xl absolute flex right-[25%] md:right-[10%] bottom-[10%] md:bottom-[60%] z-50">
         <div className="bg-gray-300 w-1/2 h-full px-4 flex rounded-l-2xl justify-center items-center">
           <img
             src="max.png"

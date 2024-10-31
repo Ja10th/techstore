@@ -72,12 +72,12 @@ const ProductList = () => {
 
   return (
     <div className="relative z-30">
-      <div className="flex justify-between items-center py-20  px-10">
+      <div className="flex justify-between items-center py-20  px-10 md:px-20">
         <motion.h2
-          initial={{ x: "-100px", opacity: 0 }}
-          whileInView={{ x: "0px", opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1.3, ease: "easeInOut" }}
-          className="text-5xl font-bold"
+          initial={{ filter: "blur(10px)", opacity: 0 }}
+          whileInView={{ filter: "blur(0px)", opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.5, ease: "easeInOut" }}
+          className="text-6xl font-bold"
         >
           Best Sellers
         </motion.h2>
@@ -100,7 +100,7 @@ const ProductList = () => {
           <Link
             href={`/product/${product.slug}`}
             key={product._id}
-            className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
+            className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] hover:bg-dot-black/[0.8] bg-dot-blue-500/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
               ${index % 4 !== 3 ? "md:border-r-0" : ""}  
               ${index < products.length - 4 ? "md:border-b-0" : ""}`}
             onMouseEnter={() => setHoveredProduct(product)}
@@ -120,7 +120,7 @@ const ProductList = () => {
                   width={150}
                   height={150}
                   alt={product.name}
-                  className="object-contain transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[200px] h-[200px] md:w-auto md:h-[250px]"
+                  className="object-contain object-center transition-transform duration-[1.2s] ease-in-out transform hover:scale-110 cursor-pointer w-[200px] h-[200px] md:w-auto md:h-[250px]"
                 />
               )}
             </div>

@@ -45,9 +45,7 @@ const SearchResultsPage = () => {
     <motion.div className="fixed inset-0 bg-white flex flex-col">
       <Top />
       <Floating />
-      <div className="!mt-40">
         <NavbarCart heroHeight={0} />
-      </div>
 
       <motion.div 
         initial="hidden"
@@ -55,7 +53,7 @@ const SearchResultsPage = () => {
         variants={fadeIn}
         className="flex-1 overflow-auto p-4 px-10 md:px-0"
       >
-        <p className="text-black px-10 text-md py-4">
+        <p className="text-black px-10 text-md pt-40">
           Search Results for
         </p>
         <h2 className="capitalize font-black font-mono px-10 text-2xl pb-5">{query}</h2>
@@ -76,10 +74,11 @@ const SearchResultsPage = () => {
             </motion.div>
           ) : (
             results.map((result, index) => (
-                <motion.div
+                <Link
                 key={result._id}
+                href={`/product/${result.slug.current}`}
                 className={`product-card z-30 relative bg-[#F1F1F1] border  border-black dark:bg-dot-white/[0.2] bg-dot-black/[0.3] hover:bg-dot-black/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
-                ${index % 4 !== 3 ? "md:border-r-0" : ""}  
+                ${index % 4 !== 3 ? "md:border-r-1" : ""}  
               ${index < results.length - 4 ? "md:border-b-0" : ""}`}
                 onMouseEnter={() => setHoveredProduct(result)}
                 onMouseLeave={() => setHoveredProduct(null)}
@@ -118,7 +117,7 @@ const SearchResultsPage = () => {
                     </Link>
                   </motion.div>
                 )}
-              </motion.div>
+              </Link>
             ))
           )}
         </div>
