@@ -19,7 +19,7 @@ interface DataType {
 
 async function fetchProducts() {
   // Fetch a larger set of products
-  const query = `*[_type == 'product'][0...20] {
+  const query = `*[_type == 'product' ][0...20] {
     _id,
     name,
     price,
@@ -100,14 +100,14 @@ const ProductList = () => {
           <Link
             href={`/product/${product.slug}`}
             key={product._id}
-            className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] hover:bg-dot-black/[0.8] bg-dot-blue-500/[0.8] dark:bg-black transition-transform ease-in-out duration-700 
+            className={`product-card z-30 relative bg-[#F1F1F1] border border-black dark:bg-dot-white/[0.2] hover:bg-dot-black/[0.8] bg-dot-blue-500/[1.8] dark:bg-black transition-transform ease-in-out duration-700 
               ${index % 4 !== 3 ? "md:border-r-0" : ""}  
               ${index < products.length - 4 ? "md:border-b-0" : ""}`}
             onMouseEnter={() => setHoveredProduct(product)}
             onMouseLeave={() => setHoveredProduct(null)}
           >
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-            <div className="flex justify-between px-5 py-6 md:py-12 relative gap-10 z-40">
+            <div className="flex justify-between px-10 py-6 md:py-12 relative gap-10 z-40">
               <h3 className="uppercase text-sm">{product.name}</h3>
               <p className="text-sm">
                 NGN {product.price.toLocaleString("en-NG")}

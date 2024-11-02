@@ -58,7 +58,9 @@ async function getOtherProducts() {
   }`;
 
   const data = await client.fetch(query);
-  return data;
+  const shuffledProducts = data.sort(() => Math.random() - 0.5);
+  const randomProducts = shuffledProducts.slice(0, 8);
+  return randomProducts;
 }
 
 const Page = async ({ params }: { params: { slug: string } }) => {
